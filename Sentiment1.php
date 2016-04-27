@@ -91,7 +91,6 @@ class Sentiment1 {
 		//open database for positive and negative training data
 		require_once 'db_connection.php';
 		require_once 'functions.php';
-		$connection = mysqli_connect("localhost", "buzzminer", "Buzz1!", "buzzminer");
 
 		//get all negative data
 		$queryneg = "SELECT * FROM negtrain";
