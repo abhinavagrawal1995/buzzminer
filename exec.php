@@ -1,6 +1,7 @@
 <?php
-	var_dump(getcwd());
-	$output = shell_exec('ls');
-	var_dump($output);
-	die('done');
+        $output = shell_exec('git pull');
+        echo '<pre>'.$output.'</pre>';
+        die('done');
 ?>
+
+
