@@ -1,0 +1,6 @@
+# ignore key files
+api_key.txt
+oauthkeys.txt
+# ignore db conn
+db_connection.php
+buzzminer.sql
