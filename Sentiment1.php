@@ -90,7 +90,7 @@ class Sentiment1 {
 	function train ($limit=0) {
 		//open database for positive and negative training data
 		include 'db_connection.php';
-		include 'functions.php';
+		require_once 'functions.php';
 
 		//get all negative data
 		$queryneg = "SELECT * FROM negtrain";
