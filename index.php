@@ -63,8 +63,9 @@
 							</select>
 
 							<label>Select a classifier:</label>
-							Alchemy (positive | negative | neutral)<input type="radio" name="classifier" value="alchemy" checked><br>
-						        Custom Naive Bayes (positive | negative)<input type="radio" name="classifier" value="custom">
+							 Custom Naive Bayes (positive | negative)<input type="radio" name="classifier" value="custom" checked>
+							Alchemy (positive | negative | neutral)<input type="radio" name="classifier" value="alchemy" ><br>
+						       
 						</fieldset>
 						<input type="submit" /> <br>
 					</form>				
