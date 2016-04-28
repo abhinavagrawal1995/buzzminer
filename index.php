@@ -33,7 +33,7 @@
 							<li>
 								<a href="#" class="icon fa-angle-down">Layouts</a>
 								<ul>
-									<li><a href="generic.php">Generic</a></li>
+									<li><a href="indexc.php">Analyize Sentiments Geographically</a></li>
 									<li><a href="contact.php">Contact</a></li>
 									<li><a href="elements.php">Elements</a></li>
 									<li>
