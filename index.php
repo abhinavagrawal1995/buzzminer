@@ -85,12 +85,12 @@
 							</div>
 							<div class="row uniform 50%">
 								<div class="6u 12u(narrower)">
-									<input type="radio" id="classifier" name="classifier" value="custom" checked>
-									<label for="classifier">Custom Naive Bayes (positive | negative)</label>
+									<input type="radio" id="classifier1" name="classifier" value="custom" checked>
+									<label for="classifier1">Custom Naive Bayes (positive | negative)</label>
 								</div>
 								<div class="6u 12u(narrower)">
-									<input type="radio" id="classifier" name="classifier" value="alchemy">
-									<label for="classifier">Alchemy (positive | negative | neutral)</label>
+									<input type="radio" id="classifier2" name="classifier" value="alchemy">
+									<label for="classifier2">Alchemy (positive | negative | neutral)</label>
 								</div>
 							</div>
 							<div class="row uniform">

@@ -14,7 +14,7 @@
 
 	function display_tweet($t, $response){
 		//<div class="4u"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
-		echo '<hr><div class="row">';
+		echo '<hr><div class="row wow slideInLeft">';
 			echo '<div class="2u">';
 				echo '<span class="image fit">';
 					echo '<img src="' . $t -> user -> profile_image_url .'" alt="profile image" />';
