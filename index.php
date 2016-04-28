@@ -72,7 +72,7 @@
 							<div class="row uniform 50%">
 								<div class="8u 12u(mobilep)">
 									<label for="n">Keyword: </label>
-									<input type="text" name="q" placeholder="Keyword" />
+									<input type="text" name="q" placeholder="Keyword" required/>
 								</div>
 								<div class="4u 12u(mobilep)">
 									<label>Number of Tweets:</label>
@@ -96,13 +96,13 @@
 							<div class="row uniform">
 								<div class="12u">
 									<ul class="actions align-center">
-										<li><button type="submit" class="button special fit">Analyze</button></li>
+										<li><button type="submit" name="submit" class="button special fit">Analyze</button></li>
 									</ul>
 								</div>
 							</div>
 						</form>
 						<?php 
-							if(isset($_POST['q'])){
+							if(isset($_POST['submit'])){
 								echo '<h3>Analyzing Keyword :<code style="animated infinite bounce">' . $_POST['q'] . '</code></h3>';
 							}
 						?>
@@ -110,96 +110,102 @@
 
 						<div id="box">
 							<?php
-								ini_set('display_errors', 0);
-								require_once 'alchemyapi.php';
-								require_once 'Sentiment1.php';
-								$custom_sent = new Sentiment1();
-								$custom_sent -> train(19000); 
-								$alchemyapi = new AlchemyAPI();
+								if(isset($_POST['submit'])){
 
-								/*use TwitterAPIExchange for handling calls */
-								
-								require_once('TwitterAPIExchange.php');
+									ini_set('display_errors', 0);
+									require_once 'alchemyapi.php';
+									require_once 'Sentiment1.php';
+									$custom_sent = new Sentiment1();
+									$custom_sent -> train(19000); 
+									$alchemyapi = new AlchemyAPI();
 
-								/** Set access tokens here - see: https://dev.twitter.com/apps/ **/
-								$oauth_file = file_get_contents("oauthkeys.txt");
-								$oauth_arr = explode("\n", $oauth_file);
-
-								$settings = array(
-									'oauth_access_token' => $oauth_arr[0],
-									'oauth_access_token_secret' => $oauth_arr[1],
-									'consumer_key' => $oauth_arr[2],
-									'consumer_secret' => $oauth_arr[3]
-									);
-
-								//echo $_POST['classifier'];
-
-								if ( isset($_POST['q'])){
-									//$query = 'monday';
-									$url = 'https://api.twitter.com/1.1/search/tweets.json';
-									$x1 = " ";
-									$y1 = "%20";
-									$z1 = $_POST['q'];
-									$qry= str_replace($x1,$y1,$z1);
-									$getfield ='?lang=en&count=' . $_POST['num_tweets'] . '&q=' . $qry . '-filter:retweets';
-									//$getfield = '?q=manipal';
-									$requestMethod = 'GET';
-									$twitter = new TwitterAPIExchange($settings);
-									//var_dump($twitter);
-									$tweets = json_decode($twitter->setGetfield($getfield)
-										->buildOauth($url, $requestMethod)
-										->performRequest());
-									//var_dump($tweets);
-
-									$pos_count=0;
-									$neg_count=0;
-									$neu_count=0;
-									$cust_pos=0;
-									$cust_neg=0;
-
+									/*use TwitterAPIExchange for handling calls */
 									
-									foreach ($tweets -> statuses as $t) {
-										// foreach ($tweet as $t){
-										//calculate the sentiment of each tweet
-										if ($t -> text != ''){
-											if($_POST['classifier']=='alchemy'){
-												$response = $alchemyapi -> sentiment('text', $t -> text , null);				
-												display_tweet($t, $response);
-												// store_tweet_db($_POST['q'], $t->text, $response['docSentiment']['type'],$response);
+									require_once('TwitterAPIExchange.php');
 
-												if ($response['docSentiment']['type']=='neutral'){
-													$neu_count++;
-												}
-												if ($response['docSentiment']['type']=='positive'){
-													$pos_count++;
-												}
-												if ($response['docSentiment']['type']=='negative'){
-													$neg_count++;
-												}
+									/** Set access tokens here - see: https://dev.twitter.com/apps/ **/
+									$oauth_file = file_get_contents("oauthkeys.txt");
+									$oauth_arr = explode("\n", $oauth_file);
+
+									$settings = array(
+										'oauth_access_token' => $oauth_arr[0],
+										'oauth_access_token_secret' => $oauth_arr[1],
+										'consumer_key' => $oauth_arr[2],
+										'consumer_secret' => $oauth_arr[3]
+										);
+
+									//echo $_POST['classifier'];
+
+									if ( isset($_POST['q'])){
+										//$query = 'monday';
+										$url = 'https://api.twitter.com/1.1/search/tweets.json';
+										$x1 = " ";
+										$y1 = "%20";
+										$z1 = $_POST['q'];
+										$qry= str_replace($x1,$y1,$z1);
+										$getfield ='?lang=en&count=' . $_POST['num_tweets'] . '&q=' . $qry . '-filter:retweets';
+										//$getfield = '?q=manipal';
+										$requestMethod = 'GET';
+										$twitter = new TwitterAPIExchange($settings);
+										//var_dump($twitter);
+										$tweets = json_decode($twitter->setGetfield($getfield)
+											->buildOauth($url, $requestMethod)
+											->performRequest());
+										//var_dump($tweets);
+
+										$pos_count=0;
+										$neg_count=0;
+										$neu_count=0;
+										$cust_pos=0;
+										$cust_neg=0;
+
+										
+										foreach ($tweets -> statuses as $t) {
+											// foreach ($tweet as $t){
+											//calculate the sentiment of each tweet
+											if ($t -> text != ''){
+												if($_POST['classifier']=='alchemy'){
+													$response = $alchemyapi -> sentiment('text', $t -> text , null);				
+													display_tweet($t, $response);
+													// store_tweet_db($_POST['q'], $t->text, $response['docSentiment']['type'],$response);
+
+													if ($response['docSentiment']['type']=='neutral'){
+														$neu_count++;
+													}
+													if ($response['docSentiment']['type']=='positive'){
+														$pos_count++;
+													}
+													if ($response['docSentiment']['type']=='negative'){
+														$neg_count++;
+													}
+												} 
+												
+												else if($_POST['classifier']=='custom'){
+													$sentiment = $custom_sent ->classify($t->text);
+													display_custom($t,$sentiment);
+													if ($sentiment=='pos'){
+														$cust_pos++;
+													} else {
+														$cust_neg++;
+													}
+												}																			
 											} 
-											
-											else {
-												$sentiment = $custom_sent ->classify($t->text);
-												display_custom($t,$sentiment);
-												if ($sentiment=='pos'){
-													$cust_pos++;
-												} else {
-													$cust_neg++;
-												}
-											}																			
-										} 
+										}
 									}
+									/*if($_POST['classifier']=='alchemy'){
+										echo 'positives: ' . $pos_count . '<br>';
+										echo 'negatives: ' . $neg_count . '<br>';
+										echo 'neutrals: ' . $neu_count . '<br>';
+									}*/
+										// }	
 								}
-								/*if($_POST['classifier']=='alchemy'){
-									echo 'positives: ' . $pos_count . '<br>';
-									echo 'negatives: ' . $neg_count . '<br>';
-									echo 'neutrals: ' . $neu_count . '<br>';
-								}*/
-									// }	
 							?>
 						</div>
-						<div id="box" class="content">
-							<canvas id="chart-area"></canvas>
+						<div class="box alt">
+							<div class="row no-collapse 50% uniform">
+								<div class="12u"><canvas id="chart-area1"></canvas></div>
+								<div class="6u"><canvas id="chart-area2"></canvas></div>
+							</div>
 						</div>
 					</div>
 					</section>
@@ -241,10 +247,43 @@
 
 			];
 
+			
+
+			//bar
+			var barrData = [
+			{
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $neg_count : $cust_neg); ?>,
+				color:"#F7464A",
+				highlight: "#FF5A5E",
+				label: "Negative"
+			},
+			{
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $pos_count : $cust_pos); ?>,
+				color: "#46BFBD",
+				highlight: "#5AD3D1",
+				label: "Positive"
+			},
+			{
+				value: <?php echo $neu_count; ?>,
+				color: "#949FB1",
+				highlight: "#A8B3C5",
+				label: "Neutral"
+			}
+
+
+			];
+
+
 			window.onload = function(){
-				var ctx = document.getElementById("chart-area").getContext("2d");
+				var ctx = document.getElementById("chart-area1").getContext("2d");
 				window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
+				var barr = document.getElementById('chart-area2').getContext('2d');
+			 	window.myBar=new Chart(barr).Line(barrData, {responsive : true});
 			};
+
+			
+
+
 		</script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.dropotron.min.js"></script>

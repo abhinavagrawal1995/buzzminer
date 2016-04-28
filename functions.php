@@ -14,6 +14,14 @@
 
 	function display_tweet($t, $response){
 		//<div class="4u"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
+		
+		if($response['docSentiment']['type']=="positive")
+			$res="Positive";
+		else if($response['docSentiment']['type']=="negative")
+			$res="Negative";
+		else if($response['docSentiment']['type']=="neutral")
+			$res="Neutral";
+
 		echo '<hr><div class="row wow slideInLeft">';
 			echo '<div class="2u">';
 				echo '<span class="image fit">';
