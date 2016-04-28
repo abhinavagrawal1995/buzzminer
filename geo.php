@@ -94,39 +94,52 @@
 						<div id="box">
 							<?php
 								if(isset($_POST['submit'])){
-
-									ini_set('display_errors', 0);
+									//ini_set('display_errors', 1);
 									require_once 'alchemyapi.php';
 									require_once 'Sentiment1.php';
 									$custom_sent = new Sentiment1();
 									$custom_sent -> train(19000); 
 									$alchemyapi = new AlchemyAPI();
-
 									/*use TwitterAPIExchange for handling calls */
 									
 									require_once('TwitterAPIExchange.php');
-
 									/** Set access tokens here - see: https://dev.twitter.com/apps/ **/
 									$oauth_file = file_get_contents("oauthkeys.txt");
 									$oauth_arr = explode("\n", $oauth_file);
-
 									$settings = array(
 										'oauth_access_token' => $oauth_arr[0],
 										'oauth_access_token_secret' => $oauth_arr[1],
 										'consumer_key' => $oauth_arr[2],
 										'consumer_secret' => $oauth_arr[3]
 										);
-
 									//echo $_POST['classifier'];
-
 									if ( isset($_POST['q'])){
 										//$query = 'monday';
+										$loc=array(
+											'Asia'=>'34.0479,100.6197,10000mi',
+											'Europe'=>'54.5260,15.2551,10000mi',
+											'North America'=>'54.5260,-105.2551,10000mi',
+											'South America'=>'-8.7832,-55.4915,10000mi',
+											'Australia'=>'-25.2744,133.7751,10000mi',
+											'Africa'=>'-8.7832,34.5085,10000mi',
+											'Antarctica'=>'-82.8628,135.0000,10000mi'
+											);
+										$locl=array_values($loc);
+										$locn = array_keys($loc);
+										$pos_count= [0,0,0,0,0,0,0] ;
+										$neg_count= [0,0,0,0,0,0,0] ;
+										$neu_count= [0,0,0,0,0,0,0] ;
+										$cust_pos=  [0,0,0,0,0,0,0] ;
+										$cust_neg=  [0,0,0,0,0,0,0] ;
+										
+										for($i=0;$i<7;$i++)
+										{
 										$url = 'https://api.twitter.com/1.1/search/tweets.json';
 										$x1 = " ";
 										$y1 = "%20";
 										$z1 = $_POST['q'];
 										$qry= str_replace($x1,$y1,$z1);
-										$getfield ='?lang=en&count=' . $_POST['num_tweets'] . '&q=' . $qry . '-filter:retweets';
+										$getfield ='?lang=en&count=' . $_POST['num_tweets'] . '&geocode=' .$locl[$i]. '&q=' . $qry . '-filter:retweets';
 										//$getfield = '?q=manipal';
 										$requestMethod = 'GET';
 										$twitter = new TwitterAPIExchange($settings);
@@ -135,60 +148,102 @@
 											->buildOauth($url, $requestMethod)
 											->performRequest());
 										//var_dump($tweets);
-
-										$pos_count=0;
-										$neg_count=0;
-										$neu_count=0;
-										$cust_pos=0;
-										$cust_neg=0;
-
-										
+										echo 'Region: <b>'.$locn[$i]. '</b> <br>';
 										foreach ($tweets -> statuses as $t) {
 											// foreach ($tweet as $t){
-											//calculate the sentiment of each tweet
-											if ($t -> text != ''){
-												if($_POST['classifier']=='alchemy'){
-													$response = $alchemyapi -> sentiment('text', $t -> text , null);				
-													display_tweet($t, $response);
-													// store_tweet_db($_POST['q'], $t->text, $response['docSentiment']['type'],$response);
-
-													if ($response['docSentiment']['type']=='neutral'){
-														$neu_count++;
+										//calculate the sentiment of each tweet
+												if ($t -> text != ''){
+													if($_POST['classifier']=='alchemy'){
+														$response = $alchemyapi -> sentiment('text', $t -> text , null);				
+														display_tweet($t, $response);
+														// store_tweet_db($_POST['q'], $t->text, $response['docSentiment']['type'],$response);
+														if ($response['docSentiment']['type']=='neutral'){
+															$neu_count[$i]++;
+														}
+														if ($response['docSentiment']['type']=='positive'){
+															$pos_count[$i]++;
+														}
+														if ($response['docSentiment']['type']=='negative'){
+															$neg_count[$i]++;
+														}
+													} 
+													
+													else {
+														$sentiment = $custom_sent ->classify($t->text);
+														display_custom($t,$sentiment);
+														if ($sentiment=='pos'){
+															$cust_pos[$i]++;
+														} else {
+															$cust_neg[$i]++;
+														}
 													}
-													if ($response['docSentiment']['type']=='positive'){
-														$pos_count++;
-													}
-													if ($response['docSentiment']['type']=='negative'){
-														$neg_count++;
-													}
+																								
 												} 
-												
-												else if($_POST['classifier']=='custom'){
-													$sentiment = $custom_sent ->classify($t->text);
-													display_custom($t,$sentiment);
-													if ($sentiment=='pos'){
-														$cust_pos++;
-													} else {
-														$cust_neg++;
-													}
-												}																			
-											} 
+											}
+											echo '<br>';
+											echo "Sentiment Scores Summary for ".$locn[$i].":". "&nbsp";
+											if($_POST['classifier']=='alchemy')
+											{
+											echo 'positives: ' . $pos_count[$i] . '&nbsp';
+											echo 'negatives: ' . $neg_count[$i] . '&nbsp';
+											echo 'neutrals: ' . $neu_count[$i]. '<br>'; 
+											}
+											else if($_POST['classifier']=='custom')
+											{
+											echo 'positives: ' . $cust_pos[$i] . '&nbsp';
+											echo 'negatives: ' . $cust_neg[$i] . '<br>';
+											}
+											echo '<hr>';
 										}
-									}
-									/*if($_POST['classifier']=='alchemy'){
-										echo 'positives: ' . $pos_count . '<br>';
-										echo 'negatives: ' . $neg_count . '<br>';
-										echo 'neutrals: ' . $neu_count . '<br>';
-									}*/
-										// }	
+									
+									// To get the max positive and -ve sentiment continents	
+										
+									$maxpos=max($pos_count);
+									$key = array_search($maxpos, $pos_count);
+									$sneg=$neg_count[$key];
+									$snu1=$neu_count[$key];
+									$pregion=$locn[$key];
+									
+									
+									$maxneg=max($neg_count);
+									$key = array_search($maxneg, $neg_count);
+									$spos=$pos_count[$key];
+									$snu2=$neu_count[$key];
+									$nregion=$locn[$key];
+									
+								
+									
+									$maxcpos=max($cust_pos);
+									$key = array_search($maxcpos, $cust_pos);
+									$scneg=$cust_neg[$key];
+									$pcregion=$locn[$key];
+									
+									
+									$maxcneg=max($cust_neg);
+									$key = array_search($maxneg, $cust_neg);
+									$scpos=$cust_pos[$key];
+									$ncregion=$locn[$key];
+									
+									
+									
+									
 								}
-							?>
+							}	
+						?>
 						</div>
 						<?php if(isset($_POST['submit'])){ ?>
 						<div class="box alt">
 							<div class="row no-collapse 50% uniform">
-								<div class="12u"><canvas id="chart-area1"></canvas></div>
-								<div class="6u"><canvas id="chart-area2"></canvas></div>
+								<div class="6u">
+									<h2>Most Positive Opinions</h2>
+									<div id="pctnt"></div>
+									<canvas id="chart-area"></canvas>
+								</div>
+								<div class="6u">
+									<h2>Most Negative Opinions</h2>
+									<div id="nctnt"></div>
+									<canvas id="chart-areaa"></canvas>
+								</div>
 							</div>
 						</div>
 						<?php } ?>
@@ -207,68 +262,63 @@
 		</div>
 
 		<!-- Scripts -->
+		
 		<script>
-
 			var doughnutData = [
 			{
-				value: <?php echo ($_POST['classifier']=='alchemy' ? $neg_count : $cust_neg); ?>,
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $sneg : $scneg); ?>,
 				color:"#F7464A",
 				highlight: "#FF5A5E",
 				label: "Negative"
 			},
 			{
-				value: <?php echo ($_POST['classifier']=='alchemy' ? $pos_count : $cust_pos); ?>,
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $maxpos : $maxcpos); ?>,
 				color: "#46BFBD",
 				highlight: "#5AD3D1",
 				label: "Positive"
 			},
 			{
-				value: <?php echo $neu_count; ?>,
+				value: <?php echo $snu1;  ?>,
 				color: "#949FB1",
 				highlight: "#A8B3C5",
 				label: "Neutral"
 			}
-
-
 			];
-
-			
-
-			//bar
-			var barrData = [
+			var doughnutData1 = [
 			{
-				value: <?php echo ($_POST['classifier']=='alchemy' ? $neg_count : $cust_neg); ?>,
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $maxneg : $maxcneg); ?>,
 				color:"#F7464A",
 				highlight: "#FF5A5E",
 				label: "Negative"
 			},
 			{
-				value: <?php echo ($_POST['classifier']=='alchemy' ? $pos_count : $cust_pos); ?>,
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $spos : $scpos); ?>,
 				color: "#46BFBD",
 				highlight: "#5AD3D1",
 				label: "Positive"
 			},
 			{
-				value: <?php echo $neu_count; ?>,
+				value: <?php echo $snu2;  ?>,
 				color: "#949FB1",
 				highlight: "#A8B3C5",
 				label: "Neutral"
 			}
-
-
 			];
-
-
 			window.onload = function(){
-				var ctx = document.getElementById("chart-area1").getContext("2d");
+				var ctx = document.getElementById("chart-area").getContext("2d");
 				window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
-				var barr = document.getElementById('chart-area2').getContext('2d');
-			 	window.myBar=new Chart(barr).Line(barrData, {responsive : true});
+				
+				var ctx1 = document.getElementById("chart-areaa").getContext("2d");
+				window.myDoughnut1 = new Chart(ctx1).Doughnut(doughnutData1, {responsive : true});
+				
+				
+				
 			};
-
+			document.getElementById("pctnt").innerText =  <?php echo '"'. ($_POST['classifier']=='alchemy' ? $pregion : $pcregion).'"'; ?>  ;
+			document.getElementById("nctnt").innerText =  <?php echo '"'. ($_POST['classifier']=='alchemy' ? $nregion: $ncregion).'"'; ?>  ;
 			
-
-
+		
+			
 		</script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.dropotron.min.js"></script>
