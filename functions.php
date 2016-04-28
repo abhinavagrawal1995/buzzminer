@@ -23,12 +23,12 @@
 			$res="Neutral";
 
 		echo '<hr><div class="row wow slideInLeft">';
-			echo '<div class="2u">';
+			echo '<div class="1u">';
 				echo '<span class="image fit">';
 					echo '<img src="' . $t -> user -> profile_image_url .'" alt="profile image" />';
 				echo '</span>'; 
 			echo '</div>'; //end image
-			echo '<div class="10u">';
+			echo '<div class="11u">';
 				echo '<h4> Sentiment: <code>'. $response['docSentiment']['type'] . '</code></h4>';
 				echo '<h5>' . $t -> user -> screen_name . '</h5>';
 				echo '<p>' . $t -> text . '</p>';

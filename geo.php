@@ -91,6 +91,23 @@
 						?>
 						<br>
 
+						<?php if(isset($_POST['submit'])){ ?>
+						<div class="box alt">
+							<div class="row no-collapse 50% uniform">
+								<div class="6u">
+									<h2>Most Positive Opinions</h2>
+									<div id="pctnt"></div>
+									<canvas id="chart-area"></canvas>
+								</div>
+								<div class="6u">
+									<h2>Most Negative Opinions</h2>
+									<div id="nctnt"></div>
+									<canvas id="chart-areaa"></canvas>
+								</div>
+							</div>
+						</div>
+						<?php } ?>
+
 						<div id="box">
 							<?php
 								if(isset($_POST['submit'])){
@@ -231,22 +248,7 @@
 							}	
 						?>
 						</div>
-						<?php if(isset($_POST['submit'])){ ?>
-						<div class="box alt">
-							<div class="row no-collapse 50% uniform">
-								<div class="6u">
-									<h2>Most Positive Opinions</h2>
-									<div id="pctnt"></div>
-									<canvas id="chart-area"></canvas>
-								</div>
-								<div class="6u">
-									<h2>Most Negative Opinions</h2>
-									<div id="nctnt"></div>
-									<canvas id="chart-areaa"></canvas>
-								</div>
-							</div>
-						</div>
-						<?php } ?>
+						
 					</div>
 					</section>
 

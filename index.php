@@ -90,7 +90,14 @@
 							}
 						?>
 						<br>
-
+						<?php if(isset($_POST['submit'])){ ?>
+						<div class="box alt">
+							<div class="row no-collapse 50% uniform">
+								<div class="12u"><canvas id="chart-area1"></canvas></div>
+								<div class="6u"><canvas id="chart-area2"></canvas></div>
+							</div>
+						</div>
+						<?php } ?>
 						<div id="box">
 							<?php
 								if(isset($_POST['submit'])){
@@ -184,14 +191,7 @@
 								}
 							?>
 						</div>
-						<?php if(isset($_POST['submit'])){ ?>
-						<div class="box alt">
-							<div class="row no-collapse 50% uniform">
-								<div class="12u"><canvas id="chart-area1"></canvas></div>
-								<div class="6u"><canvas id="chart-area2"></canvas></div>
-							</div>
-						</div>
-						<?php } ?>
+						
 					</div>
 					</section>
 
