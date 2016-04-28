@@ -13,35 +13,40 @@
 
 
 	function display_tweet($t, $response){
-		echo '<div class="email-item pure-g">';
-		echo '<div class="pure-u-1-5">';
-		echo '<img class="email-avatar" src="' . $t -> user -> profile_image_url .'" alt="profile image" />';
-		echo '</div>'; //close pure u
-		echo '<div class="pure-u-4-5">';
-		echo '<h4 class="email-subject"> sentiment: '. $response['docSentiment']['type'] . '</h4>';
-		echo '<h5 class="email-name">' . $t -> user -> screen_name . '</h5>';
-		echo '<p class="email-desc">' . $t -> text . '</p>';
-		echo '</div>'; //close pure u 3 4
-		//echo $t-> id . '<br>';
-		
+		//<div class="4u"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
+		echo '<hr><div class="row">';
+			echo '<div class="2u">';
+				echo '<span class="image fit">';
+					echo '<img src="' . $t -> user -> profile_image_url .'" alt="profile image" />';
+				echo '</span>'; 
+			echo '</div>'; //end image
+			echo '<div class="10u">';
+				echo '<h4> Sentiment: <code>'. $response['docSentiment']['type'] . '</code></h4>';
+				echo '<h5>' . $t -> user -> screen_name . '</h5>';
+				echo '<p>' . $t -> text . '</p>';
+			echo '</div>'; //close desc
+		echo '</div>';	
+			//$response['docSentiment']['type']
+		//echo $t-> id . '<br>';		
 	    //echo 'score: '. $response['docSentiment']['score'];
-	    echo '</div>';//close email item pure g
 	   // return $display_string;
 	}
 
 	function display_custom($t, $response){
-		echo '<div class="email-item pure-g">';
-		echo '<div class="pure-u-1-5">';
-		echo '<img class="email-avatar" src="' . $t -> user -> profile_image_url .'" alt="profile image" />';
-		echo '</div>'; //close pure u
-		echo '<div class="pure-u-4-5">';
-		echo '<h4 class="email-subject"> sentiment: '. $response . '</h4>';
-		echo '<h5 class="email-name">' . $t -> user -> screen_name . '</h5>';
-		echo '<p class="email-desc">' . $t -> text . '</p>';
-		echo '</div>'; //close pure u 3 4
-		
+
+		echo '<hr><div class="row wow slideInLeft">';
+			echo '<div class="2u">';
+				echo '<span class="image fit">';
+					echo '<img src="' . $t -> user -> profile_image_url .'" alt="profile image" />';
+				echo '</span>'; 
+			echo '</div>'; //end image
+			echo '<div class="10u">';
+				echo '<h4> Sentiment: <code>'. $response . '</code></h4>';
+				echo '<h5>' . $t -> user -> screen_name . '</h5>';
+				echo '<p>' . $t -> text . '</p>';
+			echo '</div>'; //close desc
+		echo '</div>';		
 	    //echo 'score: '. $response['docSentiment']['score'];
-	    echo '</div>';//close email item pure g
 	   // return $display_string;
 	}
 

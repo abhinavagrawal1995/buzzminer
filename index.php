@@ -1,108 +1,116 @@
 <?php require_once 'db_connection.php'; ?>
 <?php require_once 'functions.php'; ?>
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+<!--
+	BuzzMiner
+	abhinavagrawal.in | gROOT
+-->
 <html>
-<head>
-	<link rel="stylesheet" href="css/pure/pure-min.css">
-	<link rel="stylesheet" href="css/pure/grids-responsive-min.css">
-	<link rel="stylesheet" href="css/layouts/marketing.css">
-	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="UTF-8" />
-	<title>Twitter Sentiment Analysis </title>
-	<script src="Chart.js"></script>
-	<style>
-		body{
-			padding: 0;
-			margin: 0;
-		}
-		#canvas-holder{
-			width:30%;
-		}
-	</style>
+	<head>
+		<title>BuzzMiner</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/animate.css" />
 
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<script src="Chart.js"></script>
+		<script src="assets/js/wow.min.js"></script>
+		<script>
+              new WOW().init();
+        </script>
+	</head>
+	<body class="landing">
+		<div id="page-wrapper">
 
-</head>
-	<body>	
-		<div id="layout">
+			<!-- Header -->
+				<header id="header" class="alt">
+					<h1><a href="index.php">BuzzMiner</a></h1>
+					<nav id="nav">
+						<ul>
+							<li><a href="index.php">Home</a></li>
+							<li>
+								<a href="#" class="icon fa-angle-down">Layouts</a>
+								<ul>
+									<li><a href="generic.php">Generic</a></li>
+									<li><a href="contact.php">Contact</a></li>
+									<li><a href="elements.php">Elements</a></li>
+									<li>
+										<a href="#">Submenu</a>
+										<ul>
+											<li><a href="#">Option One</a></li>
+											<li><a href="#">Option Two</a></li>
+											<li><a href="#">Option Three</a></li>
+											<li><a href="#">Option Four</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li><a href="#" class="button">Sign Up</a></li>
+						</ul>
+					</nav>
+				</header>
 
-			<div id="menu">
-			       <div class="pure-menu">
-			           <a class="pure-menu-heading" href="#">Company</a>
+			<!-- Banner -->
+				<section id="banner">
+					<h2>BuzzMiner</h2>
+					<p>Twitter Sentiment-Analysis tool</p>
+					<ul class="actions">
+						<li><a href="#abi" class="button special">Begin</a></li>
+					</ul>
+				</section>
 
-			           <ul class="pure-menu-list">
-			               <li class="pure-menu-item"><a href="#" class="pure-menu-link">Home</a></li>
-			               <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
-
-			               <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
-			                   <a href="#" class="pure-menu-link">Services</a>
-			               </li>
-
-			               <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
-			           </ul>
-			       </div>
-			   </div>
-		    <!-- Menu toggle -->
-		    <a href="#menu" id="menuLink" class="menu-link">
-		        <!-- Hamburger icon -->
-		        <span></span>
-		    </a>
-
-		    <div id="main">
-				<div class="header">
-					<div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed" style="text-align: center" >
-						<a class="pure-menu-heading" href="">Buzz Miner</a>
-					</div>
-				</div>
-
-				<div class="splash-container">
-					<div class="splash">
-						<h1 class="splash-head">Twitter Sentiment Analysis</h1>
-						<p class="splash-subhead"></p>
-					</div>
-				</div>
-
-				<div class="content-wrapper">
-					<div class="content">
-						<h2 class="content-head is-center">Type your BUZZword and select how many Tweets to analyse:</h2>
-
-						<div class="pure-g">
-							<div class="l-box pure-u-1-1">
-
-								<form method="POST" class="pure-form pure-form-stacked">
-									<fieldset>
-										<label>Keyword: </label>
-										<input type="text" name="q" placeholder="e.g. Manipal"/>
-										<label>Number of Tweets:</label>
-										<select name="num_tweets">
-											<option value="20" selected>5</option>
-											<option value="40">10</option>
-											<option value="60">15</option>
-										</select>
-
-										<label>Select a classifier:</label>
-										 Custom Naive Bayes (positive | negative)<input type="radio" name="classifier" value="custom" checked>
-										Alchemy (positive | negative | neutral)<input type="radio" name="classifier" value="alchemy" ><br>
-									       
-									</fieldset>
-									<input type="submit" /> <br>
-								</form>				
+			<!-- Main -->
+				<section id="main" class="container wow" data-wow-duration="5s">
+				<nav id="abi"></nav>
+					<section class="box special">
+						<div class="box">
+						<h3>Type your BUZZword and select how many Tweets to analyse:</h3>
+						<hr>
+						<form method="post" action="#" class="wow rollIn">
+							<div class="row uniform 50%">
+								<div class="8u 12u(mobilep)">
+									<label for="n">Keyword: </label>
+									<input type="text" name="q" placeholder="Keyword" />
+								</div>
+								<div class="4u 12u(mobilep)">
+									<label>Number of Tweets:</label>
+									<select name="num_tweets">
+										<option value="20" selected>5</option>
+										<option value="40">10</option>
+										<option value="60">15</option>
+									</select>
+								</div>
 							</div>
-						</div>
-					</div>
-					<?php 
-						if(isset($_POST['q'])){
-							echo '<h2 class="content-head is-center content">Here are the results for ' . $_POST['q'] . '</h2>';
-						}
-					?>
-					<div id="canvas-holder" class="content">
-						<canvas id="chart-area" width="500" height="500"></canvas>
-					</div>
-					<div class="content">
-						<div id="list" class="pure-u-1">
+							<div class="row uniform 50%">
+								<div class="6u 12u(narrower)">
+									<input type="radio" id="priority-low" name="priority" name="classifier" value="custom" checked>
+									<label for="priority-low">Custom Naive Bayes (positive | negative)</label>
+								</div>
+								<div class="6u 12u(narrower)">
+									<input type="radio" id="priority-low" name="priority" name="classifier" value="alchemy">
+									<label for="priority-low">Alchemy (positive | negative | neutral)</label>
+								</div>
+							</div>
+							<div class="row uniform">
+								<div class="12u">
+									<ul class="actions align-center">
+										<li><button type="submit" class="button special fit">Analyze</button></li>
+									</ul>
+								</div>
+							</div>
+						</form>
+						<?php 
+							if(isset($_POST['q'])){
+								echo '<h3>Analyzing Keyword :<code style="animated infinite bounce">' . $_POST['q'] . '</code></h3>';
+							}
+						?>
+						<br>
 
+						<div id="box">
 							<?php
-								ini_set('display_errors', 1);
+								ini_set('display_errors', 0);
 								require_once 'alchemyapi.php';
 								require_once 'Sentiment1.php';
 								$custom_sent = new Sentiment1();
@@ -189,51 +197,62 @@
 								}*/
 									// }	
 							?>
-
 						</div>
-						<div id="canvas-holder" class="content">
-							<canvas id="chart-area" width="500" height="500"></canvas>
+						<div id="box" class="content">
+							<canvas id="chart-area"></canvas>
 						</div>
-						
-						<script>
-
-							var doughnutData = [
-							{
-								value: <?php echo ($_POST['classifier']=='alchemy' ? $neg_count : $cust_neg); ?>,
-								color:"#F7464A",
-								highlight: "#FF5A5E",
-								label: "Negative"
-							},
-							{
-								value: <?php echo ($_POST['classifier']=='alchemy' ? $pos_count : $cust_pos); ?>,
-								color: "#46BFBD",
-								highlight: "#5AD3D1",
-								label: "Positive"
-							},
-							{
-								value: <?php echo $neu_count; ?>,
-								color: "#949FB1",
-								highlight: "#A8B3C5",
-								label: "Neutral"
-							}
-
-
-							];
-
-							window.onload = function(){
-								var ctx = document.getElementById("chart-area").getContext("2d");
-								window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
-							};
-						</script>
 					</div>
-				</div>
-			</div>
+					</section>
+
+				</section>
+
+			<!-- Footer -->
+				<footer id="footer">
+					<ul class="copyright">
+						<li>  Developers : <a href="http://abhinavagrawal.in">gROOT</a> and Amit</li>
+					</ul>
+				</footer>
+
 		</div>
+
+		<!-- Scripts -->
+		<script>
+
+			var doughnutData = [
+			{
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $neg_count : $cust_neg); ?>,
+				color:"#F7464A",
+				highlight: "#FF5A5E",
+				label: "Negative"
+			},
+			{
+				value: <?php echo ($_POST['classifier']=='alchemy' ? $pos_count : $cust_pos); ?>,
+				color: "#46BFBD",
+				highlight: "#5AD3D1",
+				label: "Positive"
+			},
+			{
+				value: <?php echo $neu_count; ?>,
+				color: "#949FB1",
+				highlight: "#A8B3C5",
+				label: "Neutral"
+			}
+
+
+			];
+
+			window.onload = function(){
+				var ctx = document.getElementById("chart-area").getContext("2d");
+				window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
+			};
+		</script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/jquery.scrollgress.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+
 	</body>
 </html>
-<?php
-	//close db connection
-if (isset($connection)) {
-	mysqli_close($connection);
-}
-?> 
