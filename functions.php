@@ -34,6 +34,11 @@
 
 	function display_custom($t, $response){
 
+		if($response=="pos")
+			$res="Positive";
+		else if($response=="neg")
+			$res="Negative";
+
 		echo '<hr><div class="row wow slideInLeft">';
 			echo '<div class="2u">';
 				echo '<span class="image fit">';
@@ -41,7 +46,7 @@
 				echo '</span>'; 
 			echo '</div>'; //end image
 			echo '<div class="10u">';
-				echo '<h4> Sentiment: <code>'. $response . '</code></h4>';
+				echo '<h4> Sentiment: <code>'. $res . '</code></h4>';
 				echo '<h5>' . $t -> user -> screen_name . '</h5>';
 				echo '<p>' . $t -> text . '</p>';
 			echo '</div>'; //close desc
