@@ -170,7 +170,7 @@
 											->buildOauth($url, $requestMethod)
 											->performRequest());
 										//var_dump($tweets);
-										echo 'Region: <b>'.$locn[$i]. '</b> <br>';
+										echo '<h3>Region: <code class="wow slideInDown">'.$locn[$i]. '</code></h3> <br>';
 										foreach ($tweets -> statuses as $t) {
 											// foreach ($tweet as $t){
 										//calculate the sentiment of each tweet
